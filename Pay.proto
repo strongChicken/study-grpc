@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package Pay;
+
+message ConsumeReq{
+    int64 item_id = 1;
+    int64 price = 2;
+    string description = 3;
+    int64 item_num = 4;
+    int32 order_id = 5;
+}
+
+message ConsumeResp{
+    int64 result = 1;
+    string message = 2;
+}
+
+service Save{
+    rpc Pay(ConsumeReq) returns(ConsumeResp);
+}
