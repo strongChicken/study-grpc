@@ -44,9 +44,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         item_id = request.item_id
         # when item_id is null, will be zero
         if item_id == 0:
-            resp.message = "item_id can not be null or zero"
-            print("insert failed")
-            return resp
+            return gen_error_resp(errors.ERR_INPUT_INVALID)
 
         # now = datetime.datetime.now()
         # order_id = '%s%d' % (now.strftime('%Y%m%d%H%M%S'), random.randint(1000000000))
@@ -86,9 +84,8 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             print('success')
         except Exception as e:
             self.conn.rollback()
-            resp.result = -3
             print("Error ", e)
-            return resp
+            return gen_error_resp(errors.ERR_INPUT_INVALID)     # 不知道返回什么
 
         resp = exercise_pb2.ConsumeResp()
         resp.result = 0
@@ -97,19 +94,42 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         return resp
 
     def Query(self, request, context):
+        # check item_info.num by item_id
+        # if enough -> return NUM
+        # if not enough -> return not enough and NUM
+        # ues begin...commit
+        order_id = SaveInfo.Pay(request.order_id)
+        resp = exercise_pb2.QueryResp()
+        self.conn = pymysql.connect("localhost", "order_sql")
+        print("Query->connect order_sql success")
         c = self.conn.cursor()
-        resp = exercise_pb2.QueryReq()
-
-        self.conn.begin()
         try:
-            result = c.execute('''SELECT * FROM table=%s FOR UPDATE''' % db)
+            print("开启事务A")
+            self.conn.begin()
+            c.execute('''SELECT item_id FROM order_info WHERE order_id= %d;''' % order_id)
+            print("try to SELECT item_id FROM ITEM_info WHERE order_id")
+            item_id = c.fetchone()
             self.conn.commit()
-            c.close()
-            print("context: ", context)
-            return result
+            print("item_id：", item_id)
         except Exception as e:
             self.conn.rollback()
-            print("check error: ", e)
+            print("Error:", e)
+            resp.description = "the order_id was invalid"
+            return resp
+
+        try:
+            print("开始事务B")
+            self.conn.commit()
+            c.execute('''SELECT NUM  FROM ITEM_INFO WHERE ITEM_ID= %d''' % item_id)
+            print("SELECT NUM FROM ITEM_INFO WHERE ITEM_ID")
+            num = c.fetchone()
+            print("库存:", num)
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            print("query item_info error: ", e)
+            resp.description = "the num was error"
+            return resp
 
 
 def main():

@@ -28,5 +28,17 @@ def pay():
     print("success")
 
 
+def query_data():
+    port = 50051
+    channel = grpc.insecure_channel("127.0.0.1:%d" % port)
+    print("link for port to qurey")
+    stub = exercise_pb2_grpc.SaveStub(channel=channel)
+    print("made stub")
+    req = exercise_pb2.QueryReq()
+    req.order_id = 1
+    resp = stub.Query(req)
+    print("resp: ", resp)
+
+
 if __name__ == '__main__':
     pay()
