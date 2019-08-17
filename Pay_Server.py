@@ -8,7 +8,7 @@ from concurrent import futures
 from make_gRPC_by_myself import exercise_pb2
 from make_gRPC_by_myself import exercise_pb2_grpc
 
-from . import errors
+from make_gRPC_by_myself import errors
 
 
 class SaveInfo(exercise_pb2_grpc.SaveServicer):
@@ -55,7 +55,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
 
             # 2 查询库存（num）
             print('query item_info')
-            c.execute('''SELECT num FROM item_info where item_id= %d;''' % item_id)
+            c.execute('''SELECT num FROM item_info where item_id= %d FOR UPDATE;''' % item_id)
             num = c.fetchone()
             if num is None:
                 return gen_error_resp(errors.ERR_ITEM_NOT_FOUND)
@@ -98,19 +98,19 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         # if enough -> return NUM
         # if not enough -> return not enough and NUM
         # ues begin...commit
-        order_id = SaveInfo.Pay(request.order_id)
         resp = exercise_pb2.QueryResp()
-        self.conn = pymysql.connect("localhost", "order_sql")
+        order_id = request.order_id
+        self.conn = pymysql.connect("localhost", "root", "284927463", "order_sql")
         print("Query->connect order_sql success")
         c = self.conn.cursor()
         try:
-            print("开启事务A")
+            print("开启事务-查询 订单id")
             self.conn.begin()
-            c.execute('''SELECT item_id FROM order_info WHERE order_id= %d;''' % order_id)
+            item_id = c.execute('''SELECT item_id FROM order_info WHERE order_id= %s;''' % order_id)
             print("try to SELECT item_id FROM ITEM_info WHERE order_id")
-            item_id = c.fetchone()
             self.conn.commit()
             print("item_id：", item_id)
+            resp.ID = item_id
         except Exception as e:
             self.conn.rollback()
             print("Error:", e)
@@ -118,13 +118,14 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return resp
 
         try:
-            print("开始事务B")
+            print("开始事务- 查询 商品id")
             self.conn.commit()
-            c.execute('''SELECT NUM  FROM ITEM_INFO WHERE ITEM_ID= %d''' % item_id)
+            num = c.execute('''SELECT NUM  FROM ITEM_INFO WHERE ITEM_ID= %d''' % item_id)
             print("SELECT NUM FROM ITEM_INFO WHERE ITEM_ID")
-            num = c.fetchone()
+            resp.description = ("num: %d" % num)
             print("库存:", num)
             self.conn.commit()
+            return resp
         except Exception as e:
             self.conn.rollback()
             print("query item_info error: ", e)
