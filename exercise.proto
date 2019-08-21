@@ -23,8 +23,19 @@ message QueryResp{
     string description = 2;
 }
 
+message ReturnReq{
+    string order_id = 1;
+    int64 return_num = 2;
+}
+
+message ReturnResp{
+    string result = 1;
+    string order_id_ret = 2;
+}
+
 service Save{
     rpc Pay(ConsumeReq) returns(ConsumeResp);
     rpc Query(QueryReq) returns(QueryResp);
+    rpc Return(ReturnReq) returns(ReturnResp);
 }
 

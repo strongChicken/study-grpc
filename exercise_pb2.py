@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='exercise',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"S\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x10\n\x08item_num\x18\x04 \x01(\x03\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1c\n\x08QueryReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t2l\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryRespb\x06proto3')
+  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"D\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1c\n\x08QueryReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"1\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x12\n\nreturn_num\x18\x02 \x01(\x03\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t2\xa1\x01\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnRespb\x06proto3')
 )
 
 
@@ -41,22 +41,15 @@ _CONSUMEREQ = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='price', full_name='exercise.ConsumeReq.price', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='description', full_name='exercise.ConsumeReq.description', index=2,
-      number=3, type=9, cpp_type=9, label=1,
+      name='description', full_name='exercise.ConsumeReq.description', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='item_num', full_name='exercise.ConsumeReq.item_num', index=3,
-      number=4, type=3, cpp_type=2, label=1,
+      name='item_num', full_name='exercise.ConsumeReq.item_num', index=2,
+      number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -74,7 +67,7 @@ _CONSUMEREQ = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=28,
-  serialized_end=111,
+  serialized_end=96,
 )
 
 
@@ -118,8 +111,8 @@ _CONSUMERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=113,
-  serialized_end=177,
+  serialized_start=98,
+  serialized_end=162,
 )
 
 
@@ -149,8 +142,8 @@ _QUERYREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=179,
-  serialized_end=207,
+  serialized_start=164,
+  serialized_end=192,
 )
 
 
@@ -187,14 +180,92 @@ _QUERYRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=209,
-  serialized_end=253,
+  serialized_start=194,
+  serialized_end=238,
+)
+
+
+_RETURNREQ = _descriptor.Descriptor(
+  name='ReturnReq',
+  full_name='exercise.ReturnReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='order_id', full_name='exercise.ReturnReq.order_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='return_num', full_name='exercise.ReturnReq.return_num', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=240,
+  serialized_end=289,
+)
+
+
+_RETURNRESP = _descriptor.Descriptor(
+  name='ReturnResp',
+  full_name='exercise.ReturnResp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='exercise.ReturnResp.result', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='order_id_ret', full_name='exercise.ReturnResp.order_id_ret', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=291,
+  serialized_end=341,
 )
 
 DESCRIPTOR.message_types_by_name['ConsumeReq'] = _CONSUMEREQ
 DESCRIPTOR.message_types_by_name['ConsumeResp'] = _CONSUMERESP
 DESCRIPTOR.message_types_by_name['QueryReq'] = _QUERYREQ
 DESCRIPTOR.message_types_by_name['QueryResp'] = _QUERYRESP
+DESCRIPTOR.message_types_by_name['ReturnReq'] = _RETURNREQ
+DESCRIPTOR.message_types_by_name['ReturnResp'] = _RETURNRESP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ConsumeReq = _reflection.GeneratedProtocolMessageType('ConsumeReq', (_message.Message,), {
@@ -225,6 +296,20 @@ QueryResp = _reflection.GeneratedProtocolMessageType('QueryResp', (_message.Mess
   })
 _sym_db.RegisterMessage(QueryResp)
 
+ReturnReq = _reflection.GeneratedProtocolMessageType('ReturnReq', (_message.Message,), {
+  'DESCRIPTOR' : _RETURNREQ,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.ReturnReq)
+  })
+_sym_db.RegisterMessage(ReturnReq)
+
+ReturnResp = _reflection.GeneratedProtocolMessageType('ReturnResp', (_message.Message,), {
+  'DESCRIPTOR' : _RETURNRESP,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.ReturnResp)
+  })
+_sym_db.RegisterMessage(ReturnResp)
+
 
 
 _SAVE = _descriptor.ServiceDescriptor(
@@ -233,8 +318,8 @@ _SAVE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=255,
-  serialized_end=363,
+  serialized_start=344,
+  serialized_end=505,
   methods=[
   _descriptor.MethodDescriptor(
     name='Pay',
@@ -252,6 +337,15 @@ _SAVE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_QUERYREQ,
     output_type=_QUERYRESP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Return',
+    full_name='exercise.Save.Return',
+    index=2,
+    containing_service=None,
+    input_type=_RETURNREQ,
+    output_type=_RETURNRESP,
     serialized_options=None,
   ),
 ])
