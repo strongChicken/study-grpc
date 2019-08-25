@@ -15,17 +15,17 @@ sys.path.append("/Users/water/waaater/make_gRPC_by_myself")
 print("start greet")
 
 
-def pay():
+def pay(item_id: int, item_num: int, user_id: int):
     port = 50051
     channel = grpc.insecure_channel("127.0.0.1:%d" % port)
     print("link for port")
     stub = exercise_pb2_grpc.SaveStub(channel=channel)
     print("make stub")
     req = exercise_pb2.ConsumeReq()
-    # IO的异常处理 TODO
-    req.item_id = 3
+    req.item_id = item_id
     req.description = "test"
-    req.item_num = 1
+    req.item_num = item_num
+    req.user_id = user_id
     print("send request")
     resp = stub.Pay(req)
     print('resp', resp)
@@ -60,6 +60,23 @@ def return_(order_id: str, return_num: int):
     print("send request:", req.order_id, "& ", req.return_num)
     resp = stub.Return(req)
     print("resp: ", resp.result)
+
+
+def registered(name: str, keyword: str, tel_ph: str, gender: str, birthday: int):
+    port = 50051
+    channel = grpc.insecure_channel("127.0.0.1:%d" % port)
+    print("link for port to return")
+    stub = exercise_pb2_grpc.SaveStub(channel=channel)
+    print("made stub")
+    req = exercise_pb2.RegisteredReq()
+    req.name = name
+    req.keyword = keyword
+    req.call_num = tel_ph
+    req.gender = gender
+    req.birthday = birthday
+    print("send request:")
+    resp = stub.Return(req)
+    print("resp: ", resp.result)
     
 
 if __name__ == '__main__':
@@ -68,30 +85,47 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'return':
         return_(sys.argv[2], int(sys.argv[3]))
     elif sys.argv[1] == 'pay':
-        pay()
+        pay(int(sys.argv[2]), int(sys.argv[3]))
+    elif sys.argv[1] == 'registered':
+        registered(sys.argv[2], sys.argv[3], str(sys.argv[4]), sys.argv[5], int(sys.argv[6]))
 
 '''
 mysql -uroot -p284927463 order_sql
 
 SELECT * FROM ITEM_INFO;
 
-INSERT INTO ITEM_INFO (ITEM_ID, PRICE, NUM) VALUES (2, 18, 5);
+python3 Pay_Client.py pay 3 1
 
-python3 Pay_Client.py query 201908212156004018647 
+INSERT INTO ITEM_INFO (ITEM_ID, PRICE, NUM) VALUES (2, 18, 5);
 
 CREATE DATABASE order_sql;
 
-CREATE TABLES order_info(id int NOT NULL auto_increment, 
+CREATE TABLE ORDER_INFO(id int NOT NULL auto_increment, 
                          order_id varchar(255) NOT NULL, 
                          item_id int NOT NULL, 
+                         item_num int NOT NULL,
+                         pay_money int NOT NULL,
                          description varchar(255) NOT NULL, 
-                         item_num int NOT NULL, 
                          control_id int NOT NULL,
+                         time datetime NOT NULL, 
                          PRIMARY KEY(id));
                          
-CREATE TABLES ITEM_INFO(ITEM_ID NOT NULL auto_increment,
+CREATE TABLE ITEM_INFO(ITEM_ID NOT NULL auto_increment,
                         PRICE int NOT NULL,
                         NUM int NOT NULL,
-                        VERSION int NOT NULL,
                         PRIMARY KEY(ITEM_ID);
+                        
+CREATE TABLE MEM_INFO(id int NOT NULL auto_increment,
+                      name varchar(255) NOT NULL,
+                      keyword varchar(255) NOT NULL,
+                      call_num varchar(255) NOT NULL,
+                      gender varchar(255) NOT NULL,
+                      birthday date,
+                      accou_bal int NOT NULL,
+                      times_consu int NOT NULL,
+                      money_consu int NOT NULL,
+                      PRIMARY KEY(id));
+                      
+                        
+ALTER TABLE 
 '''

@@ -29,6 +29,21 @@ class SaveStub(object):
         request_serializer=exercise__pb2.ReturnReq.SerializeToString,
         response_deserializer=exercise__pb2.ReturnResp.FromString,
         )
+    self.Register = channel.unary_unary(
+        '/exercise.Save/Register',
+        request_serializer=exercise__pb2.RegisteredReq.SerializeToString,
+        response_deserializer=exercise__pb2.RegisteredResp.FromString,
+        )
+    self.Login = channel.unary_unary(
+        '/exercise.Save/Login',
+        request_serializer=exercise__pb2.LoginReq.SerializeToString,
+        response_deserializer=exercise__pb2.LoginResp.FromString,
+        )
+    self.Recharge = channel.unary_unary(
+        '/exercise.Save/Recharge',
+        request_serializer=exercise__pb2.RechargeReq.SerializeToString,
+        response_deserializer=exercise__pb2.RechargeResp.FromString,
+        )
 
 
 class SaveServicer(object):
@@ -56,6 +71,27 @@ class SaveServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Register(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def Login(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def Recharge(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_SaveServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -73,6 +109,21 @@ def add_SaveServicer_to_server(servicer, server):
           servicer.Return,
           request_deserializer=exercise__pb2.ReturnReq.FromString,
           response_serializer=exercise__pb2.ReturnResp.SerializeToString,
+      ),
+      'Register': grpc.unary_unary_rpc_method_handler(
+          servicer.Register,
+          request_deserializer=exercise__pb2.RegisteredReq.FromString,
+          response_serializer=exercise__pb2.RegisteredResp.SerializeToString,
+      ),
+      'Login': grpc.unary_unary_rpc_method_handler(
+          servicer.Login,
+          request_deserializer=exercise__pb2.LoginReq.FromString,
+          response_serializer=exercise__pb2.LoginResp.SerializeToString,
+      ),
+      'Recharge': grpc.unary_unary_rpc_method_handler(
+          servicer.Recharge,
+          request_deserializer=exercise__pb2.RechargeReq.FromString,
+          response_serializer=exercise__pb2.RechargeResp.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

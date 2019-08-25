@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='exercise',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"D\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1c\n\x08QueryReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"1\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x12\n\nreturn_num\x18\x02 \x01(\x03\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t2\xa1\x01\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnRespb\x06proto3')
+  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"U\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\x12\x0f\n\x07user_id\x18\x04 \x01(\x05\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1c\n\x08QueryReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"B\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x12\n\nreturn_num\x18\x02 \x01(\x03\x12\x0f\n\x07user_id\x18\x03 \x01(\x05\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t\"b\n\rRegisteredReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x03 \x01(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x10\n\x08\x62irthday\x18\x05 \x01(\x05\"Q\n\x0eRegisteredResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x04 \x01(\x05\"*\n\tLoginResp\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\"\x1a\n\x08LoginReq\x12\x0e\n\x06result\x18\x01 \x01(\t\"M\n\x0cRechargeResp\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07keyword\x18\x03 \x01(\t\x12\r\n\x05money\x18\x04 \x01(\x05\"\x1d\n\x0bRechargeReq\x12\x0e\n\x06result\x18\x01 \x01(\t2\xcd\x02\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnResp\x12=\n\x08Register\x12\x17.exercise.RegisteredReq\x1a\x18.exercise.RegisteredResp\x12\x30\n\x05Login\x12\x12.exercise.LoginReq\x1a\x13.exercise.LoginResp\x12\x39\n\x08Recharge\x12\x15.exercise.RechargeReq\x1a\x16.exercise.RechargeRespb\x06proto3')
 )
 
 
@@ -54,6 +54,13 @@ _CONSUMEREQ = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user_id', full_name='exercise.ConsumeReq.user_id', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -67,7 +74,7 @@ _CONSUMEREQ = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=28,
-  serialized_end=96,
+  serialized_end=113,
 )
 
 
@@ -111,8 +118,8 @@ _CONSUMERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=98,
-  serialized_end=162,
+  serialized_start=115,
+  serialized_end=179,
 )
 
 
@@ -142,8 +149,8 @@ _QUERYREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=164,
-  serialized_end=192,
+  serialized_start=181,
+  serialized_end=209,
 )
 
 
@@ -180,8 +187,8 @@ _QUERYRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=194,
-  serialized_end=238,
+  serialized_start=211,
+  serialized_end=255,
 )
 
 
@@ -206,6 +213,13 @@ _RETURNREQ = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user_id', full_name='exercise.ReturnReq.user_id', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -218,8 +232,8 @@ _RETURNREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=240,
-  serialized_end=289,
+  serialized_start=257,
+  serialized_end=323,
 )
 
 
@@ -256,8 +270,271 @@ _RETURNRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=291,
-  serialized_end=341,
+  serialized_start=325,
+  serialized_end=375,
+)
+
+
+_REGISTEREDREQ = _descriptor.Descriptor(
+  name='RegisteredReq',
+  full_name='exercise.RegisteredReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='exercise.RegisteredReq.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='keyword', full_name='exercise.RegisteredReq.keyword', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='call_num', full_name='exercise.RegisteredReq.call_num', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='gender', full_name='exercise.RegisteredReq.gender', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='birthday', full_name='exercise.RegisteredReq.birthday', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=377,
+  serialized_end=475,
+)
+
+
+_REGISTEREDRESP = _descriptor.Descriptor(
+  name='RegisteredResp',
+  full_name='exercise.RegisteredResp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='exercise.RegisteredResp.result', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='account', full_name='exercise.RegisteredResp.account', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='exercise.RegisteredResp.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='call_num', full_name='exercise.RegisteredResp.call_num', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=477,
+  serialized_end=558,
+)
+
+
+_LOGINRESP = _descriptor.Descriptor(
+  name='LoginResp',
+  full_name='exercise.LoginResp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='exercise.LoginResp.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='keyword', full_name='exercise.LoginResp.keyword', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=560,
+  serialized_end=602,
+)
+
+
+_LOGINREQ = _descriptor.Descriptor(
+  name='LoginReq',
+  full_name='exercise.LoginReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='exercise.LoginReq.result', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=604,
+  serialized_end=630,
+)
+
+
+_RECHARGERESP = _descriptor.Descriptor(
+  name='RechargeResp',
+  full_name='exercise.RechargeResp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='user_id', full_name='exercise.RechargeResp.user_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='exercise.RechargeResp.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='keyword', full_name='exercise.RechargeResp.keyword', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='money', full_name='exercise.RechargeResp.money', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=632,
+  serialized_end=709,
+)
+
+
+_RECHARGEREQ = _descriptor.Descriptor(
+  name='RechargeReq',
+  full_name='exercise.RechargeReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='exercise.RechargeReq.result', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=711,
+  serialized_end=740,
 )
 
 DESCRIPTOR.message_types_by_name['ConsumeReq'] = _CONSUMEREQ
@@ -266,6 +543,12 @@ DESCRIPTOR.message_types_by_name['QueryReq'] = _QUERYREQ
 DESCRIPTOR.message_types_by_name['QueryResp'] = _QUERYRESP
 DESCRIPTOR.message_types_by_name['ReturnReq'] = _RETURNREQ
 DESCRIPTOR.message_types_by_name['ReturnResp'] = _RETURNRESP
+DESCRIPTOR.message_types_by_name['RegisteredReq'] = _REGISTEREDREQ
+DESCRIPTOR.message_types_by_name['RegisteredResp'] = _REGISTEREDRESP
+DESCRIPTOR.message_types_by_name['LoginResp'] = _LOGINRESP
+DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
+DESCRIPTOR.message_types_by_name['RechargeResp'] = _RECHARGERESP
+DESCRIPTOR.message_types_by_name['RechargeReq'] = _RECHARGEREQ
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ConsumeReq = _reflection.GeneratedProtocolMessageType('ConsumeReq', (_message.Message,), {
@@ -310,6 +593,48 @@ ReturnResp = _reflection.GeneratedProtocolMessageType('ReturnResp', (_message.Me
   })
 _sym_db.RegisterMessage(ReturnResp)
 
+RegisteredReq = _reflection.GeneratedProtocolMessageType('RegisteredReq', (_message.Message,), {
+  'DESCRIPTOR' : _REGISTEREDREQ,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.RegisteredReq)
+  })
+_sym_db.RegisterMessage(RegisteredReq)
+
+RegisteredResp = _reflection.GeneratedProtocolMessageType('RegisteredResp', (_message.Message,), {
+  'DESCRIPTOR' : _REGISTEREDRESP,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.RegisteredResp)
+  })
+_sym_db.RegisterMessage(RegisteredResp)
+
+LoginResp = _reflection.GeneratedProtocolMessageType('LoginResp', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINRESP,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.LoginResp)
+  })
+_sym_db.RegisterMessage(LoginResp)
+
+LoginReq = _reflection.GeneratedProtocolMessageType('LoginReq', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINREQ,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.LoginReq)
+  })
+_sym_db.RegisterMessage(LoginReq)
+
+RechargeResp = _reflection.GeneratedProtocolMessageType('RechargeResp', (_message.Message,), {
+  'DESCRIPTOR' : _RECHARGERESP,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.RechargeResp)
+  })
+_sym_db.RegisterMessage(RechargeResp)
+
+RechargeReq = _reflection.GeneratedProtocolMessageType('RechargeReq', (_message.Message,), {
+  'DESCRIPTOR' : _RECHARGEREQ,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.RechargeReq)
+  })
+_sym_db.RegisterMessage(RechargeReq)
+
 
 
 _SAVE = _descriptor.ServiceDescriptor(
@@ -318,8 +643,8 @@ _SAVE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=344,
-  serialized_end=505,
+  serialized_start=743,
+  serialized_end=1076,
   methods=[
   _descriptor.MethodDescriptor(
     name='Pay',
@@ -346,6 +671,33 @@ _SAVE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_RETURNREQ,
     output_type=_RETURNRESP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Register',
+    full_name='exercise.Save.Register',
+    index=3,
+    containing_service=None,
+    input_type=_REGISTEREDREQ,
+    output_type=_REGISTEREDRESP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Login',
+    full_name='exercise.Save.Login',
+    index=4,
+    containing_service=None,
+    input_type=_LOGINREQ,
+    output_type=_LOGINRESP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Recharge',
+    full_name='exercise.Save.Recharge',
+    index=5,
+    containing_service=None,
+    input_type=_RECHARGEREQ,
+    output_type=_RECHARGERESP,
     serialized_options=None,
   ),
 ])
