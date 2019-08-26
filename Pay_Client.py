@@ -75,7 +75,7 @@ def registered(name: str, keyword: str, tel_ph: str, gender: str, birthday: int)
     req.gender = gender
     req.birthday = birthday
     print("send request:")
-    resp = stub.Return(req)
+    resp = stub.Register(req)
     print("resp: ", resp.result)
     
 

@@ -202,10 +202,8 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             order_id_ret = '%s%d' % (time.strftime('%Y%m%d%H%M%S', localtime), random.randint(1, 10000000))
             resp.order_id_ret = order_id_ret
             print("生成退款订单号:", order_id_ret)
-            print("退款订单类型：", type(order_id_ret))
 
             # 写入退单操作
-            print("return_num:", request.return_num)
             order_ret = "INSERT INTO order_info(order_id, item_id, item_num, control_id) VALUES(%s, %s, %s, %s)"
             c.execute(order_ret, (order_id_ret, item_id_ret, request.return_num, 1))
             print("写入退单信息成功：INSERT INTO order_info")
@@ -246,6 +244,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return resp
         except Exception as e:
             self.conn.rollback()
+            self.conn.commit()
             print("余额写入出错，原因：", e)
             resp.result = "退单失败"
             return resp
@@ -253,7 +252,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
     # 注册接口
     def Register(self, request, context):
         print("接入注册接口")
-        resp = exercise_pb2.RegisteredReq()
+        resp = exercise_pb2.RegisteredResp()
         name = request.name
         keyword = request.keyword
         call_num = request.call_num
@@ -263,14 +262,17 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         # birthday = request.birthday   生日格式还没用想好怎么转换
         # 密码-限制长度和类型
         # 电话-限制格式和类型
-        print("加密密码")
+
         salt = "66666"
-        key = hmac.digest(salt, keyword, digest='MD5')
+        message = bytes(keyword, encoding='utf-8')
+        salt = bytes(salt, encoding='utf-8')
+
+        key = hmac.digest(salt, message, digest='MD5')
         print("完成加密")
 
         with self.conn.cursor() as c:
             try:
-                insert_register = "INSERT INTO mem_info(id, name, keyword, call_num, gender) VALUES(NULL, %s, %s, %s, %s, %s, %s)"
+                insert_register = "INSERT INTO mem_info(id, name, keyword, call_num, gender) VALUES(NULL, %s, %s, %s, %s)"
                 c.execute(insert_register, (name, key, call_num, gender))
                 print("写入注册信息成功")
                 resp.result = "注册成功"
