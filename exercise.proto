@@ -50,23 +50,22 @@ message RegisteredResp{
     int32 call_num = 4;
 }
 
-message LoginResp{
+message LoginReq{
     string name = 1;
     string keyword = 2;
 }
 
-message LoginReq{
+message LoginResp{
     string result = 1;
 }
 
-message RechargeResp{
-    int32 user_id = 1;
-    string name = 2;
-    string keyword = 3;
-    int32 money = 4;
+message RechargeReq{
+    string name = 1;
+    string keyword = 2;
+    int32 money = 3;
 }
 
-message RechargeReq{
+message RechargeResp{
     string result = 1;
 }
 

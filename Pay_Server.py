@@ -251,7 +251,6 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
 
     # 注册接口
     def Register(self, request, context):
-        print("接入注册接口")
         resp = exercise_pb2.RegisteredResp()
         name = request.name
         keyword = request.keyword
@@ -259,23 +258,34 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         gender = request.gender
 
         # TODO
-        # birthday = request.birthday   生日格式还没用想好怎么转换
-        # 密码-限制长度和类型
+        # birthday = request.birthday
+        if len(keyword) < 6:
+            resp.result = "密码长度太短"
+            print("密码错误")
+            return resp
         # 电话-限制格式和类型
+        if len(call_num) < 11 or len(call_num) > 11:
+            resp.result = "电话号码格式不正确"
+            print("电话号码错误")
+            return resp
 
         salt = "66666"
         message = bytes(keyword, encoding='utf-8')
         salt = bytes(salt, encoding='utf-8')
 
-        key = hmac.digest(salt, message, digest='MD5')
+        key_md5 = hmac.new(salt, message, digestmod='MD5')
         print("完成加密")
+
+        key = key_md5.hexdigest()
+        print("hexdigest of key:", key)
 
         with self.conn.cursor() as c:
             try:
-                insert_register = "INSERT INTO mem_info(id, name, keyword, call_num, gender) VALUES(NULL, %s, %s, %s, %s)"
+                insert_register = "INSERT INTO MEM_INFO(name, keyword, call_num, gender) VALUES( %s, %s, %s, %s)"
                 c.execute(insert_register, (name, key, call_num, gender))
                 print("写入注册信息成功")
                 resp.result = "注册成功"
+                self.conn.commit()
                 return resp
             except Exception as e:
                 print("注册出错，原因：", e)
@@ -289,30 +299,46 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         keyword = request.keyword
 
         salt = "66666"
-        key = hmac.digest(salt, keyword, digest='MD5')
+        message = bytes(keyword, encoding='utf-8')
+        salt = bytes(salt, encoding='utf-8')
+
+        key_md5 = hmac.new(salt, message, digestmod='MD5')
+        key = key_md5.hexdigest()
+        print("hexdigest of key:", key)
 
         # 验证账号是否存在
+
+        print("验证账号信息")
         with self.conn.cursor() as c:
-            name_sql = "SELECT name FROM MEM_INFO"
-            c.execute(name_sql)
-            name_tuple = c.fetcall()
+            try:
+                name_sql = "SELECT name FROM MEM_INFO"
+                c.execute(name_sql)
+                name_tuple = c.fetchall()[0][0]
+                print("name:", name_tuple)
+                c.close()
+            except Exception as e:
+                print("验证账号出错:", e)
 
         if name_tuple is None:
             request.result = "账号密码错误"
+            print("账号错误")
             return resp
 
         # 验证密码
+        print("验证密码")
         with self.conn.cursor() as c:
             key_sql = "SELECT keyword FROM MEM_INFO WHERE name=%s"
             c.execute(key_sql, name)
-            key_tuple = c.fetcall()
+            key_tuple = c.fetchall()[0][0]
+            print("key_tuple:", key_tuple)
 
+        print("验证完成")
         if key in key_tuple:
-            request.result = "登录成功"
+            resp.result = "登录成功"
             print("存在用户信息")
             return resp
         else:
-            request.result = "账号或密码错误"
+            resp.result = "账号或密码错误"
             return resp
 
     # 充值接口
@@ -323,34 +349,43 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         keyword = request.keyword
 
         salt = "66666"
-        key = hmac.digest(salt, keyword, digest='MD5')
+        salt = bytes(salt, encoding='utf-8')
+        message = bytes(keyword, encoding='utf-8')
+
+        key_md5 = hmac.new(salt, message, digestmod='MD5')
+        key = key_md5.hexdigest()
 
         # 验证账号是否存在
+        print("验证账号")
         with self.conn.cursor() as c:
             name_sql = "SELECT name FROM MEM_INFO"
             c.execute(name_sql)
-            name_tuple = c.fetcall()
+            name_tuple = c.fetchall()[0]
+            c.close()
 
-        if name_tuple is None:
-            request.result = "账号密码错误"
+        if name not in name_tuple:
+            resp.result = "账号不存在"
+            print("账号不存在")
             return resp
 
         # 验证密码
+        print("验证密码")
         with self.conn.cursor() as c:
             key_sql = "SELECT keyword FROM MEM_INFO WHERE name=%s"
             c.execute(key_sql, name)
-            key_tuple = c.fetcall()
+            key_tuple = c.fetchall()[0]
+            c.close()
 
         if key in key_tuple:
-            request.result = "登录成功"
-            print("存在用户信息")
+            resp.result = "登录成功"
+            print("登录成功")
             with self.conn.cursor() as c:
                 accu_name = "SELECT id FROM MEM_INFO WHERE keyword=%s"
                 c.execute(accu_name, key)
                 user_id = c.fetchone()[0]
                 print("获取对应用户信息")
         else:
-            request.result = "账号或密码错误"
+            resp.result = "账号或密码错误"
             return resp
 
         self.conn.begin()
@@ -360,8 +395,9 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                 c.execute(check_bal, user_id)
             except Exception as e:
                 print("查询余额失败：", e)
-                request.result = "查询余额有误"
+                resp.result = "查询余额有误"
                 self.conn.commit()
+                c.close()
                 return resp
 
             try:
@@ -369,12 +405,14 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                 c.execute(add_bal, money)
             except Exception as e:
                 print("修改余额失败：", e)
-                request.result = "充值失败"
+                resp.result = "充值失败"
                 self.conn.rollback()
+                c.close()
                 return resp
             finally:
                 self.conn.commit()
-        request.result = "充值成功"
+                c.close()
+        resp.result = "充值成功"
         return resp
 
 

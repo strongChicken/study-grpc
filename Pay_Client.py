@@ -77,6 +77,35 @@ def registered(name: str, keyword: str, tel_ph: str, gender: str, birthday: int)
     print("send request:")
     resp = stub.Register(req)
     print("resp: ", resp.result)
+
+
+def login(name: str, keyword: str):
+    port = 50051
+    channel = grpc.insecure_channel("127.0.0.1:%d" % port)
+    print("link for port to return")
+    stub = exercise_pb2_grpc.SaveStub(channel=channel)
+    print("made stub")
+    req = exercise_pb2.LoginReq()
+    req.name = name
+    req.keyword = keyword
+    print("send request:")
+    resp = stub.Login(req)
+    print("resp: ", resp.result)
+
+
+def recharge(name: str, keyword: str, money: int):
+    port = 50051
+    channel = grpc.insecure_channel("127.0.0.1:%d" % port)
+    print("link for port to return")
+    stub = exercise_pb2_grpc.SaveStub(channel=channel)
+    print("made stub")
+    req = exercise_pb2.RechargeReq()
+    req.name = name
+    req.keyword = keyword
+    req.money = money
+    print("send request:")
+    resp = stub.Recharge(req)
+    print("resp: ", resp.result)
     
 
 if __name__ == '__main__':
@@ -88,6 +117,10 @@ if __name__ == '__main__':
         pay(int(sys.argv[2]), int(sys.argv[3]))
     elif sys.argv[1] == 'registered':
         registered(sys.argv[2], sys.argv[3], str(sys.argv[4]), sys.argv[5], int(sys.argv[6]))
+    elif sys.argv[1] == 'login':
+        login(sys.argv[2], str(sys.argv[3]))
+    elif sys.argv[1] == 'recharge':
+        recharge(sys.argv[2], sys.argv[3], int(sys.argv[4]))
 
 '''
 mysql -uroot -p284927463 order_sql
@@ -110,10 +143,10 @@ CREATE TABLE ORDER_INFO(id int NOT NULL auto_increment,
                          time datetime NOT NULL, 
                          PRIMARY KEY(id));
                          
-CREATE TABLE ITEM_INFO(ITEM_ID NOT NULL auto_increment,
+CREATE TABLE ITEM_INFO(ITEM_ID int NOT NULL auto_increment,
                         PRICE int NOT NULL,
                         NUM int NOT NULL,
-                        PRIMARY KEY(ITEM_ID);
+                        PRIMARY KEY(ITEM_ID));
                         
 CREATE TABLE MEM_INFO(id int NOT NULL auto_increment,
                       name varchar(255) NOT NULL,
@@ -121,9 +154,9 @@ CREATE TABLE MEM_INFO(id int NOT NULL auto_increment,
                       call_num varchar(255) NOT NULL,
                       gender varchar(255) NOT NULL,
                       birthday date,
-                      accou_bal int NOT NULL,
-                      times_consu int NOT NULL,
-                      money_consu int NOT NULL,
+                      accou_bal int NOT NULL DEFAULT 0,
+                      times_consu int NOT NULL DEFAULT 0,
+                      money_consu int NOT NULL DEFAULT 0,
                       PRIMARY KEY(id));
                       
                         
