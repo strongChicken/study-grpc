@@ -114,13 +114,14 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'return':
         return_(sys.argv[2], int(sys.argv[3]))
     elif sys.argv[1] == 'pay':
-        pay(int(sys.argv[2]), int(sys.argv[3]))
+        pay(int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
     elif sys.argv[1] == 'registered':
         registered(sys.argv[2], sys.argv[3], str(sys.argv[4]), sys.argv[5], int(sys.argv[6]))
     elif sys.argv[1] == 'login':
         login(sys.argv[2], str(sys.argv[3]))
     elif sys.argv[1] == 'recharge':
         recharge(sys.argv[2], sys.argv[3], int(sys.argv[4]))
+
 
 '''
 mysql -uroot -p284927463 order_sql

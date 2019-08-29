@@ -45,7 +45,6 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         if request.item_id < 0:
             return gen_error_resp(errors.ERR_INPUT_INVALID)
 
-        # 创建 cursor
         c = self.conn.cursor()
 
         description = request.description
@@ -64,7 +63,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         self.conn.begin()
         global balance
         try:
-            money = "SELECT accou_bal FROM MEM_INFO user_id= %s"
+            money = "SELECT accou_bal FROM MEM_INFO WHERE user_id= %d"
             c.execute(money, user_id)
             balance = c.fetchone()[0]
         except Exception as e:
@@ -87,6 +86,8 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         try:
             update_bal = "UPDATE MEM_INFO SET accou_bal=accou_bal - %d WHERE id= %d"
             c.execute(update_bal, cost, user_id)
+            update_times = "UPDATE mem_info SET times_consu=consu +1 WHERE id= %d"
+            c.execute(update_times, user_id)
             print("扣费成功")
             resp.message = "付款成功"
         except Exception as e:
@@ -96,7 +97,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         # 查询库存
         print('query item_info')
         c.execute('''SELECT num FROM item_info WHERE item_id= %d''' % item_id)
-        num = c.fetchone()
+        num = c.fetchone()[0]
 
         # 判断库存
         if num is None:
@@ -355,6 +356,11 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         key_md5 = hmac.new(salt, message, digestmod='MD5')
         key = key_md5.hexdigest()
 
+        if money <= 0 or money == " " or money is None:
+            resp.result = "充值金额输入错误"
+            print("充值金额输入错误")
+            return resp
+
         # 验证账号是否存在
         print("验证账号")
         with self.conn.cursor() as c:
@@ -383,6 +389,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                 accu_name = "SELECT id FROM MEM_INFO WHERE keyword=%s"
                 c.execute(accu_name, key)
                 user_id = c.fetchone()[0]
+                c.close()
                 print("获取对应用户信息")
         else:
             resp.result = "账号或密码错误"
@@ -395,7 +402,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                 c.execute(check_bal, user_id)
             except Exception as e:
                 print("查询余额失败：", e)
-                resp.result = "查询余额有误"
+                resp.result = "查询余额出错"
                 self.conn.commit()
                 c.close()
                 return resp
