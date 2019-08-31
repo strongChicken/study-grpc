@@ -28,27 +28,27 @@ def pay(item_id: int, item_num: int, user_id: int):
     req.user_id = user_id
     print("send request")
     resp = stub.Pay(req)
-    print('resp', resp)
+    print('resp', resp.message)
     if resp.result != 0:
         print(resp.message)
     else:
         print("success")
 
 
-def query_data(order_id: str):
+def query_data(item_id: str):
     port = 50051
     channel = grpc.insecure_channel("127.0.0.1:%d" % port)
     print("link for port to query")
     stub = exercise_pb2_grpc.SaveStub(channel=channel)
     print("made stub")
     req = exercise_pb2.QueryReq()
-    req.order_id = order_id
-    print("send request order_id:", req.order_id)
+    req.item_id = item_id
+    print("send request order_id:", req.item_id)
     resp = stub.Query(req)
     print("resp: ", resp.description)
 
 
-def return_(order_id: str, return_num: int):
+def return_(order_id: str, return_num: int, user_id: int):
     port = 50051
     channel = grpc.insecure_channel("127.0.0.1:%d" % port)
     print("link for port to return")
@@ -57,6 +57,7 @@ def return_(order_id: str, return_num: int):
     req = exercise_pb2.ReturnReq()
     req.order_id = order_id
     req.return_num = return_num
+    req.user_id = user_id
     print("send request:", req.order_id, "& ", req.return_num)
     resp = stub.Return(req)
     print("resp: ", resp.result)
@@ -112,7 +113,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'query':
         query_data(sys.argv[2])
     elif sys.argv[1] == 'return':
-        return_(sys.argv[2], int(sys.argv[3]))
+        return_(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]))
     elif sys.argv[1] == 'pay':
         pay(int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
     elif sys.argv[1] == 'registered':
@@ -128,7 +129,7 @@ mysql -uroot -p284927463 order_sql
 
 SELECT * FROM ITEM_INFO;
 
-python3 Pay_Client.py pay 3 1
+python3 Pay_Client.py pay 3 1 2
 
 INSERT INTO ITEM_INFO (ITEM_ID, PRICE, NUM) VALUES (2, 18, 5);
 

@@ -16,7 +16,7 @@ message ConsumeResp{
 }
 
 message QueryReq{
-    string order_id = 1;
+    string item_id = 1;
 }
 
 message QueryResp{

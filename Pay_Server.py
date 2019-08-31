@@ -1,9 +1,10 @@
 import time
-import datetime
+from datetime import datetime
 import grpc
 import pymysql
 import random
 import hmac
+import re
 
 from concurrent import futures
 from make_gRPC_by_myself import exercise_pb2
@@ -18,6 +19,15 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                                     user="root",
                                     password="284927463",
                                     database="order_sql")
+
+        with self.conn.cursor() as c:
+            try:
+                ini_sta = "UPDATE mem_info SET status=0"
+                c.execute(ini_sta)
+                self.conn.commit()
+                print("初始化登录状态成功")
+            except Exception as e:
+                print("初始化登录状态失败：", e)
 
     # 付款接口
         # 验证商品id
@@ -37,15 +47,25 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return _resp
 
         resp = exercise_pb2.ConsumeResp()
-
-        # user_id == MEM_INFO.id
         user_id = request.user_id
 
         print('request:', request)
+        # 查询库存
         if request.item_id < 0:
             return gen_error_resp(errors.ERR_INPUT_INVALID)
 
+        # 对比购买数量和库存 TODO
+
         c = self.conn.cursor()
+
+        print("检查登录状态")
+        status = "select status from mem_info where id= %s"
+        c.execute(status, user_id)
+        login_status = c.fetchone()[0]
+
+        if login_status == 0:
+            resp.message = "请先登录"
+            return resp
 
         description = request.description
         if description is None or description == "":
@@ -53,6 +73,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             print("description:", description)
 
         # 验证商品id
+        # 如果商品id不存在 TODO
         print("item_id:", request.item_id)
         item_id = request.item_id
         if item_id == 0:
@@ -63,18 +84,23 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         self.conn.begin()
         global balance
         try:
-            money = "SELECT accou_bal FROM MEM_INFO WHERE user_id= %d"
+            money = "SELECT accou_bal FROM MEM_INFO WHERE id= %s"
             c.execute(money, user_id)
             balance = c.fetchone()[0]
+            print("查询余额成功")
         except Exception as e:
             print("查询余额出错:", e)
 
-        price = "SELECT PRICE FROM ITEM_INFO WHERE ITEM_ID= %d"
-        c.execute(price, item_id)
-        item_price = c.fetchone()[0]
-        print("查询单价成功")
+        try:
+            price = "SELECT PRICE FROM ITEM_INFO WHERE ITEM_ID= %s"
+            c.execute(price, item_id)
+            item_price = c.fetchone()[0]
+            print("查询单价成功")
+        except Exception as e:
+            print("查询单价失败：", e)
 
         item_num = request.item_num
+        print("item_price:", item_price)
         cost = item_price * item_num
 
         # 判断余额是否足够
@@ -84,26 +110,24 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
 
         # 扣减余额
         try:
-            update_bal = "UPDATE MEM_INFO SET accou_bal=accou_bal - %d WHERE id= %d"
-            c.execute(update_bal, cost, user_id)
-            update_times = "UPDATE mem_info SET times_consu=consu +1 WHERE id= %d"
+            update_bal = "UPDATE MEM_INFO SET accou_bal=accou_bal - %s WHERE id= %s"
+            c.execute(update_bal, (cost, user_id))
+            update_times = "UPDATE mem_info SET times_consu=times_consu +1 WHERE id= %s"
             c.execute(update_times, user_id)
+            self.conn.commit()
             print("扣费成功")
             resp.message = "付款成功"
         except Exception as e:
             self.conn.rollback()
+            resp.message = "扣费失败"
             print("扣费失败：", e)
+            return resp
 
         # 查询库存
         print('query item_info')
         c.execute('''SELECT num FROM item_info WHERE item_id= %d''' % item_id)
         num = c.fetchone()[0]
-
-        # 判断库存
-        if num is None:
-            return gen_error_resp(errors.ERR_ITEM_NOT_FOUND)
-        if num[0] <= request.item_num:
-            return gen_error_resp(errors.ERR_ITEM_NOT_ENOUGH)
+        print("num:", num)
 
         # 3 生成order id
         print('generating order_id')
@@ -111,13 +135,16 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         order_id = '%s%d' % (time.strftime('%Y%m%d%H%M%S', localtime), random.randint(1, 10000000))
 
         # 4 写入 order
+        order_time = datetime.now()
+        print("order_time:", order_time)
         try:
-            c.execute('''INSERT INTO order_info(id order_id, item_id, description, item_num) VALUES(NULL, '%s', %d, '%s', %d);''' %
-                     (order_id, item_id, description, request.item_num))
+            print("start to insert order")
+            order_insert = "INSERT INTO order_info(order_id, item_id, description, item_num, pay_money, control_id, time) " \
+                           "VALUES(%s, %s, %s, %s, %s, %s, %s)"
+            c.execute(order_insert, (order_id, item_id, description, item_num, cost, 0, order_time))
 
         # 5 UPDATE item_info-->num
-            item_id = request.item_id
-            item_num = request.item_num
+            print("update_num")
             update_num = "UPDATE item_info SET NUM= NUM- %s where item_id= %s"
             c.execute(update_num, (item_num, item_id))
             print("修改库存成功")
@@ -139,32 +166,21 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
     # 查询接口
     def Query(self, request, context):
         resp = exercise_pb2.QueryResp()
-        order_id = request.order_id
+        item_id = request.item_id
         c = self.conn.cursor()
-
-        # 通过订单id 查找 商品id
-        try:
-            item_id = "SELECT item_id FROM order_info WHERE order_id= %s"
-            c.execute(item_id, order_id)
-            print("try to SELECT item_id FROM ITEM_info WHERE order_id")
-            print("item_id：", item_id)
-            resp.ID = item_id
-        except Exception as e:
-            print("Error:", e)
-            resp.description = "the order_id was invalid"
-            return resp
 
         # 通过商品id 查询 库存
         try:
-            c.execute('''SELECT NUM FROM ITEM_INFO WHERE ITEM_ID= %d''' % item_id)
+            c.execute('''SELECT NUM FROM ITEM_INFO WHERE ITEM_ID= %s''' % item_id)
             print("SELECT NUM FROM ITEM_INFO WHERE ITEM_ID")
-            num = c.fetchone()
+            num = c.fetchone()[0]
             print("num:", num)
             if num is None:
                 resp.description = "商品id存在"
             else:
                 resp.description = ("商品库存: %d" % num)
                 print("库存:", num)
+            self.conn.close()
             return resp
         except Exception as e:
             print("query item_info error: ", e)
@@ -172,13 +188,24 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return resp
 
     # 退单接口
+    # 重复退款 TODO
     def Return(self, request, context):
         resp = exercise_pb2.ReturnResp()
         order_id = request.order_id
         user_id = request.user_id
+        return_num = request.return_num
         # print("type_order_id:", type(order_id))
         print("order_id: ", order_id)
         c = self.conn.cursor()
+
+        print("检查登录状态")
+        status = "select status from mem_info where id= %s"
+        c.execute(status, user_id)
+        login_status = c.fetchone()[0]
+
+        if login_status == 0:
+            resp.result = "请先登录"
+            return resp
 
         try:
             self.conn.begin()
@@ -191,8 +218,9 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             c.execute('''select item_id from order_info where order_id= %s lock in share mode''', order_id)
             resu = c.fetchone()
             item_id_ret = resu[0]
-            if item_id_ret is None or (request.return_num is None):
+            if item_id_ret is None or (return_num is None):
                 resp.result = "订单错误"
+                print("查询商品id成功")
                 self.conn.rollback()
                 return resp
             else:
@@ -205,35 +233,29 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             print("生成退款订单号:", order_id_ret)
 
             # 写入退单操作
-            order_ret = "INSERT INTO order_info(order_id, item_id, item_num, control_id) VALUES(%s, %s, %s, %s)"
-            c.execute(order_ret, (order_id_ret, item_id_ret, request.return_num, 1))
+            order_time = datetime.now()
+            order_ret = "INSERT INTO order_info(order_id, item_id, item_num, time, description, pay_money, control_id) " \
+                        "VALUES(%s, %s, %s, %s, %s, %s, %s)"
+            c.execute(order_ret, (order_id_ret, item_id_ret, return_num, order_time, 'return', 0, 1))
             print("写入退单信息成功：INSERT INTO order_info")
 
             # 修改库存
             print("item_id_ret:", item_id_ret)
             item_num = "UPDATE ITEM_INFO SET NUM= NUM + %s WHERE ITEM_ID = %s"
-            c.execute(item_num, (request.return_num, item_id_ret))
+            c.execute(item_num, (return_num, item_id_ret))
             print("修改库存完成")
             resp.result = '退单完成'
 
-            # 金额沿路退还-->查询余额-->修改余额
-            try:
-                # 查询余额
-                sele_bal = "SELECT accou_bal FROM MEM_INFO WHERE id= %d FOR UPDATE"
-                c.execute(sele_bal, user_id)
-                user_bal = c.fetchone()
-                print("返回余额")
-            except Exception as e:
-                print("退款余额失败:", e)
-                self.conn.rollback()
-                self.conn.commit()
-                resp.result = "退款失败"
-                return resp
+            # 金额沿路退还-->计算退款金额-->修改余额
+            item_price = "SELECT price FROM item_info WHERE item_id= %s"
+            c.execute(item_price, item_id_ret)
+            price = c.fetchone()[0]
+            money_re = return_num * price
 
             # 修改余额
             try:
-                update_bal = "UPDATE MEM_INFO SET accou_bal= accou_bal + %d"
-                c.execute(update_bal, user_bal)
+                update_bal = "UPDATE MEM_INFO SET accou_bal= accou_bal + %s"
+                c.execute(update_bal, money_re)
                 resp.result = "退款成功"
                 print("更新余额成功")
             except Exception as e:
@@ -245,7 +267,6 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return resp
         except Exception as e:
             self.conn.rollback()
-            self.conn.commit()
             print("余额写入出错，原因：", e)
             resp.result = "退单失败"
             return resp
@@ -257,15 +278,20 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         keyword = request.keyword
         call_num = request.call_num
         gender = request.gender
+        birthday = request.birthday
 
-        # TODO
-        # birthday = request.birthday
-        if len(keyword) < 6:
+        if re.match(r'(^1|2[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])', birthday) is None:
+            resp.result = "生日日期填写有误"
+            print("生日有误")
+            return resp
+
+        if re.match(r'^\w[0-9a-zA-Z]{6,10}', keyword) is None:
             resp.result = "密码长度太短"
             print("密码错误")
             return resp
+
         # 电话-限制格式和类型
-        if len(call_num) < 11 or len(call_num) > 11:
+        if re.match(r'^1[0-9]{1,11}', call_num) is None:
             resp.result = "电话号码格式不正确"
             print("电话号码错误")
             return resp
@@ -282,8 +308,8 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
 
         with self.conn.cursor() as c:
             try:
-                insert_register = "INSERT INTO MEM_INFO(name, keyword, call_num, gender) VALUES( %s, %s, %s, %s)"
-                c.execute(insert_register, (name, key, call_num, gender))
+                insert_register = "INSERT INTO MEM_INFO(name, keyword, call_num, gender, birthday) VALUES( %s, %s, %s, %s, %s)"
+                c.execute(insert_register, (name, key, call_num, gender, birthday))
                 print("写入注册信息成功")
                 resp.result = "注册成功"
                 self.conn.commit()
@@ -328,19 +354,21 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         # 验证密码
         print("验证密码")
         with self.conn.cursor() as c:
-            key_sql = "SELECT keyword FROM MEM_INFO WHERE name=%s"
-            c.execute(key_sql, name)
-            key_tuple = c.fetchall()[0][0]
-            print("key_tuple:", key_tuple)
-
-        print("验证完成")
-        if key in key_tuple:
-            resp.result = "登录成功"
-            print("存在用户信息")
-            return resp
-        else:
-            resp.result = "账号或密码错误"
-            return resp
+            try:
+                find_user_id = "SELECT id FROM mem_info WHERE name=%s AND keyword=%s"
+                c.execute(find_user_id, (name, key))
+                user_id = c.fetchone()[0]
+                change_sta = "UPDATE mem_info SET status=1 WHERE id=%s"
+                c.execute(change_sta, user_id)
+                resp.result = "登录成功"
+                self.conn.commit()
+                print("存在用户信息")
+                c.close()
+                return resp
+            except Exception as c:
+                print("验证出错:", c)
+                resp.result = "账号或密码错误"
+                return resp
 
     # 充值接口
     def Recharge(self, request, context):
