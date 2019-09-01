@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='exercise',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"U\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\x12\x0f\n\x07user_id\x18\x04 \x01(\x05\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1b\n\x08QueryReq\x12\x0f\n\x07item_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\"B\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x12\n\nreturn_num\x18\x02 \x01(\x03\x12\x0f\n\x07user_id\x18\x03 \x01(\x05\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t\"b\n\rRegisteredReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x03 \x01(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x10\n\x08\x62irthday\x18\x05 \x01(\x05\"Q\n\x0eRegisteredResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x04 \x01(\x05\")\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\"\x1b\n\tLoginResp\x12\x0e\n\x06result\x18\x01 \x01(\t\";\n\x0bRechargeReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\x0cRechargeResp\x12\x0e\n\x06result\x18\x01 \x01(\t2\xcd\x02\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnResp\x12=\n\x08Register\x12\x17.exercise.RegisteredReq\x1a\x18.exercise.RegisteredResp\x12\x30\n\x05Login\x12\x12.exercise.LoginReq\x1a\x13.exercise.LoginResp\x12\x39\n\x08Recharge\x12\x15.exercise.RechargeReq\x1a\x16.exercise.RechargeRespb\x06proto3')
+  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"U\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\x12\x0f\n\x07user_id\x18\x04 \x01(\x05\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1b\n\x08QueryReq\x12\x0f\n\x07item_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\".\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t\"b\n\rRegisteredReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x03 \x01(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x10\n\x08\x62irthday\x18\x05 \x01(\x05\"Q\n\x0eRegisteredResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x04 \x01(\x05\")\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\"\x1b\n\tLoginResp\x12\x0e\n\x06result\x18\x01 \x01(\t\";\n\x0bRechargeReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\x0cRechargeResp\x12\x0e\n\x06result\x18\x01 \x01(\t2\xcd\x02\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnResp\x12=\n\x08Register\x12\x17.exercise.RegisteredReq\x1a\x18.exercise.RegisteredResp\x12\x30\n\x05Login\x12\x12.exercise.LoginReq\x1a\x13.exercise.LoginResp\x12\x39\n\x08Recharge\x12\x15.exercise.RechargeReq\x1a\x16.exercise.RechargeRespb\x06proto3')
 )
 
 
@@ -207,15 +207,8 @@ _RETURNREQ = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='return_num', full_name='exercise.ReturnReq.return_num', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='exercise.ReturnReq.user_id', index=2,
-      number=3, type=5, cpp_type=1, label=1,
+      name='user_id', full_name='exercise.ReturnReq.user_id', index=1,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -233,7 +226,7 @@ _RETURNREQ = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=256,
-  serialized_end=322,
+  serialized_end=302,
 )
 
 
@@ -270,8 +263,8 @@ _RETURNRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=324,
-  serialized_end=374,
+  serialized_start=304,
+  serialized_end=354,
 )
 
 
@@ -329,8 +322,8 @@ _REGISTEREDREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=376,
-  serialized_end=474,
+  serialized_start=356,
+  serialized_end=454,
 )
 
 
@@ -381,8 +374,8 @@ _REGISTEREDRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=476,
-  serialized_end=557,
+  serialized_start=456,
+  serialized_end=537,
 )
 
 
@@ -419,8 +412,8 @@ _LOGINREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=559,
-  serialized_end=600,
+  serialized_start=539,
+  serialized_end=580,
 )
 
 
@@ -450,8 +443,8 @@ _LOGINRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=602,
-  serialized_end=629,
+  serialized_start=582,
+  serialized_end=609,
 )
 
 
@@ -495,8 +488,8 @@ _RECHARGEREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=631,
-  serialized_end=690,
+  serialized_start=611,
+  serialized_end=670,
 )
 
 
@@ -526,8 +519,8 @@ _RECHARGERESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=692,
-  serialized_end=722,
+  serialized_start=672,
+  serialized_end=702,
 )
 
 DESCRIPTOR.message_types_by_name['ConsumeReq'] = _CONSUMEREQ
@@ -636,8 +629,8 @@ _SAVE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=725,
-  serialized_end=1058,
+  serialized_start=705,
+  serialized_end=1038,
   methods=[
   _descriptor.MethodDescriptor(
     name='Pay',
