@@ -50,11 +50,10 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         user_id = request.user_id
 
         print('request:', request)
-        # 查询库存
-        if request.item_id < 0:
+        # 输入数量不能小于0
+        if request.item_num <= 0:
             return gen_error_resp(errors.ERR_INPUT_INVALID)
 
-        # 对比购买数量和库存 TODO
 
         c = self.conn.cursor()
 
@@ -73,11 +72,20 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             print("description:", description)
 
         # 验证商品id
-        # 如果商品id不存在 TODO
+        # 如果商品id不存在
         print("item_id:", request.item_id)
         item_id = request.item_id
         if item_id == 0:
             return gen_error_resp(errors.ERR_INPUT_INVALID)
+
+        # 对比购买数量和库存
+        sele_num = "SELECT num FROM item_info WHERE item_id= %s"
+        c.execute(sele_num, item_id)
+        warehouse = c.fetchone()[0]
+        if request.item_num > warehouse:
+            resp.result = "库存不足"
+            c.close()
+            return resp
 
         # 事务 --> 查询、判断余额、扣减余额
         # 查询余额
@@ -188,12 +196,10 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             return resp
 
     # 退单接口
-    # 重复退款 TODO
     def Return(self, request, context):
         resp = exercise_pb2.ReturnResp()
         order_id = request.order_id
         user_id = request.user_id
-        return_num = request.return_num
         # print("type_order_id:", type(order_id))
         print("order_id: ", order_id)
         c = self.conn.cursor()
@@ -215,16 +221,26 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             # c.execute(item_id_ret, order_id)
             # resu = c.fetchone()
 
-            c.execute('''select item_id from order_info where order_id= %s lock in share mode''', order_id)
+            c.execute('''select item_id, control_id from order_info where order_id= %s lock in share mode''', order_id)
             resu = c.fetchone()
             item_id_ret = resu[0]
-            if item_id_ret is None or (return_num is None):
+            print("item_id_ret:", item_id_ret)
+            control_id = resu[1]
+            if item_id_ret is None:
                 resp.result = "订单错误"
                 print("查询商品id成功")
                 self.conn.rollback()
                 return resp
+            elif control_id == 1:
+                resp.result = "订单不能退款"
+                print("查询退单状态成功")
+                return resp
             else:
                 print("退款查询商品id 成功：", item_id_ret)
+
+            c.execute('''SELECT item_num FROM order_info WHERE order_id=%s''', order_id)
+            return_num = c.fetchone()[0]
+            print("查询退单数量成功")
 
             # 生成退款order_id_ret
             localtime = time.localtime(time.time())
@@ -238,6 +254,14 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                         "VALUES(%s, %s, %s, %s, %s, %s, %s)"
             c.execute(order_ret, (order_id_ret, item_id_ret, return_num, order_time, 'return', 0, 1))
             print("写入退单信息成功：INSERT INTO order_info")
+
+            # 修改原订单状态
+            try:
+                update_control_id = "UPDATE order_info SET control_id= 1 WHERE order_id= %s"
+                c.execute(update_control_id, order_id)
+                print("修改订单状态成功")
+            except Exception as e:
+                print("修改订单状态失败：", e)
 
             # 修改库存
             print("item_id_ret:", item_id_ret)

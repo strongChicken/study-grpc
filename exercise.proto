@@ -26,8 +26,7 @@ message QueryResp{
 
 message ReturnReq{
     string order_id = 1;
-    int64 return_num = 2;
-    int32 user_id = 3;
+    int32 user_id = 2;
 }
 
 message ReturnResp{
