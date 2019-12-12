@@ -29,6 +29,71 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             except Exception as e:
                 print("初始化登录状态失败：", e)
 
+    # order(not pay) api
+    def order(self, request, context):
+        resp = exercise_pb2.OrderResp()
+        req = exercise_pb2.OrderReq()
+
+    # 1. check the Account Online
+        user_id = request.user_id
+        c = self.conn.cursor()
+        status = "select status from men_info where id= %s"
+        c.execute(status, user_id)
+        login_status = c.fetchone()[0]
+
+        if login_status == 0:
+            resp.result = "请先登录"
+            return resp
+
+    # 2. check item AmountAndPrice
+        if req.amount <= 0:
+            resp.result = "购买数量有误"
+            return resp
+        self.conn.begin()
+        with self.conn.cursor() as c:
+            item_amount = "select NUM from item_info where ITEM_ID= %s and PRICE"
+            c.execute(item_amount, req.item_id)
+            amount = c.fetchone()[0]
+            price = c.fetchone()[1]
+            c.close()
+            self.conn.commit()
+            print("check was over")
+        if amount == 0:
+            resp.result = "库存不足"
+            self.conn.close()
+            return resp
+
+    # 3. cut the item amount
+        elif amount != 0:
+            with self.conn.cursor() as c:
+                cut_amount = "update item_info set NUM= NUM-1 where ITEM_ID= %s"
+                c.execute(cut_amount, req.item_id)
+                c.close()
+
+    # 4. write in user_order table
+        locatime = time.localtime((time.time()))
+        order_id = '%s%d' % (time.strftime('%Y%m%d%H%M%S', locatime), random.randint(1, 1000000))
+
+        payamount = amount*price
+
+        order_time = datetime.now()
+
+        self.conn.begin()
+        with self.conn.cursor() as c:
+            writeorder = "INSERT INTO ORDER_INFO(order_id, item_id, item_amount, item_money, order_time) " \
+                        "VALUES(%s, %s, %s, %s, %s)"
+            c.execute(writeorder, (order_id, req.item_id, item_amount, payamount, order_time))
+            c.close()
+        self.conn.commit()
+
+    # pay api
+        # 1. check order alive
+        # 2. check user_account money
+        # 3. check item_info if get enough or not
+        # 4. if pay enough or not
+        # 5. write pay_order in table
+        # 6. update item_info table
+
     # 付款接口
         # 验证商品id
         # 根据user_id 查询账户余额
@@ -54,9 +119,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
         if request.item_num <= 0:
             return gen_error_resp(errors.ERR_INPUT_INVALID)
 
-
         c = self.conn.cursor()
-
         print("检查登录状态")
         status = "select status from mem_info where id= %s"
         c.execute(status, user_id)
@@ -105,6 +168,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
             item_price = c.fetchone()[0]
             print("查询单价成功")
         except Exception as e:
+            resp.message = "付费失败"
             print("查询单价失败：", e)
 
         item_num = request.item_num
@@ -197,6 +261,7 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
 
     # 退单接口
     def Return(self, request, context):
+        start = time.clock()
         resp = exercise_pb2.ReturnResp()
         order_id = request.order_id
         user_id = request.user_id
@@ -287,6 +352,15 @@ class SaveInfo(exercise_pb2_grpc.SaveServicer):
                 self.conn.rollback()
                 resp.result = "退款失败"
                 return resp
+
+            end = time.clock()
+            diff_time = end - start
+
+            try:
+                insert_cus = "INSERT INTO customer_order(user_id, done, money, time, diff_time) VALUES(%s, %s, %s, %s, %s)"
+                c.execute(insert_cus, (user_id, 'return', money_re, order_time, diff_time))
+            except Exception as e:
+                print("记录退单信息失败：", e)
             self.conn.commit()
             return resp
         except Exception as e:

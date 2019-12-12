@@ -44,6 +44,11 @@ class SaveStub(object):
         request_serializer=exercise__pb2.RechargeReq.SerializeToString,
         response_deserializer=exercise__pb2.RechargeResp.FromString,
         )
+    self.Order = channel.unary_unary(
+        '/exercise.Save/Order',
+        request_serializer=exercise__pb2.OrderReq.SerializeToString,
+        response_deserializer=exercise__pb2.OrderResp.FromString,
+        )
 
 
 class SaveServicer(object):
@@ -92,6 +97,13 @@ class SaveServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Order(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_SaveServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -124,6 +136,11 @@ def add_SaveServicer_to_server(servicer, server):
           servicer.Recharge,
           request_deserializer=exercise__pb2.RechargeReq.FromString,
           response_serializer=exercise__pb2.RechargeResp.SerializeToString,
+      ),
+      'Order': grpc.unary_unary_rpc_method_handler(
+          servicer.Order,
+          request_deserializer=exercise__pb2.OrderReq.FromString,
+          response_serializer=exercise__pb2.OrderResp.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

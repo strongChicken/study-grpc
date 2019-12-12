@@ -137,13 +137,18 @@ CREATE DATABASE order_sql;
 
 CREATE TABLE ORDER_INFO(id int NOT NULL auto_increment, 
                          order_id varchar(255) NOT NULL, 
+                         alive int NOT NULL DEFAULT 0,
                          item_id int NOT NULL, 
-                         item_num int NOT NULL,
-                         pay_money int NOT NULL,
-                         description varchar(255) NOT NULL, 
-                         control_id int NOT NULL,
-                         time datetime NOT NULL, 
+                         item_amount int NOT NULL,
+                         item_money int NOT NULL,
+                         order_time datetime NOT NULL, 
                          PRIMARY KEY(id));
+                         
+CREATE TABLE USER_PAY(id int NOT NULL auto_increment,
+                        order_id int NOT NULL,
+                        pay_id int NOT NULL,
+                        pay_time datetime NOT NULL,
+                        PRIMARY KEY(id));
                          
 CREATE TABLE ITEM_INFO(ITEM_ID int NOT NULL auto_increment,
                         PRICE int NOT NULL,
@@ -161,6 +166,12 @@ CREATE TABLE MEM_INFO(id int NOT NULL auto_increment,
                       money_consu int NOT NULL DEFAULT 0,
                       PRIMARY KEY(id));
                       
-                        
-ALTER TABLE 
+CREATE TABLE customer_order(id int not null auto_increment,
+                            name varchar(255) not null,
+                            done varchar(255) not null,
+                            money int not null,
+                            time datetime not null,
+                            PRIMARY KEY(id));
+                            
+python3 -m grpc_tools.protoc --python_out=. --grpc_python_out=. -I. exercise.proto 
 '''

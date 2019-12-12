@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='exercise',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"U\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\x12\x0f\n\x07user_id\x18\x04 \x01(\x05\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1b\n\x08QueryReq\x12\x0f\n\x07item_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\".\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t\"b\n\rRegisteredReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x03 \x01(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x10\n\x08\x62irthday\x18\x05 \x01(\x05\"Q\n\x0eRegisteredResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x04 \x01(\x05\")\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\"\x1b\n\tLoginResp\x12\x0e\n\x06result\x18\x01 \x01(\t\";\n\x0bRechargeReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\x0cRechargeResp\x12\x0e\n\x06result\x18\x01 \x01(\t2\xcd\x02\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnResp\x12=\n\x08Register\x12\x17.exercise.RegisteredReq\x1a\x18.exercise.RegisteredResp\x12\x30\n\x05Login\x12\x12.exercise.LoginReq\x1a\x13.exercise.LoginResp\x12\x39\n\x08Recharge\x12\x15.exercise.RechargeReq\x1a\x16.exercise.RechargeRespb\x06proto3')
+  serialized_pb=_b('\n\x0e\x65xercise.proto\x12\x08\x65xercise\"U\n\nConsumeReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x10\n\x08item_num\x18\x03 \x01(\x03\x12\x0f\n\x07user_id\x18\x04 \x01(\x05\"@\n\x0b\x43onsumeResp\x12\x0e\n\x06result\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x10\n\x08order_id\x18\x03 \x01(\t\"\x1b\n\x08QueryReq\x12\x0f\n\x07item_id\x18\x01 \x01(\t\",\n\tQueryResp\x12\n\n\x02ID\x18\x01 \x01(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\".\n\tReturnReq\x12\x10\n\x08order_id\x18\x01 \x01(\t\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\"2\n\nReturnResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x14\n\x0corder_id_ret\x18\x02 \x01(\t\"b\n\rRegisteredReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x03 \x01(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x10\n\x08\x62irthday\x18\x05 \x01(\x05\"Q\n\x0eRegisteredResp\x12\x0e\n\x06result\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x63\x63ount\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x10\n\x08\x63\x61ll_num\x18\x04 \x01(\x05\")\n\x08LoginReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\"\x1b\n\tLoginResp\x12\x0e\n\x06result\x18\x01 \x01(\t\";\n\x0bRechargeReq\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07keyword\x18\x02 \x01(\t\x12\r\n\x05money\x18\x03 \x01(\x05\"\x1e\n\x0cRechargeResp\x12\x0e\n\x06result\x18\x01 \x01(\t\"+\n\x08OrderReq\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\"\x1b\n\tOrderResp\x12\x0e\n\x06result\x18\x01 \x01(\t2\xff\x02\n\x04Save\x12\x32\n\x03Pay\x12\x14.exercise.ConsumeReq\x1a\x15.exercise.ConsumeResp\x12\x30\n\x05Query\x12\x12.exercise.QueryReq\x1a\x13.exercise.QueryResp\x12\x33\n\x06Return\x12\x13.exercise.ReturnReq\x1a\x14.exercise.ReturnResp\x12=\n\x08Register\x12\x17.exercise.RegisteredReq\x1a\x18.exercise.RegisteredResp\x12\x30\n\x05Login\x12\x12.exercise.LoginReq\x1a\x13.exercise.LoginResp\x12\x39\n\x08Recharge\x12\x15.exercise.RechargeReq\x1a\x16.exercise.RechargeResp\x12\x30\n\x05Order\x12\x12.exercise.OrderReq\x1a\x13.exercise.OrderRespb\x06proto3')
 )
 
 
@@ -523,6 +523,75 @@ _RECHARGERESP = _descriptor.Descriptor(
   serialized_end=702,
 )
 
+
+_ORDERREQ = _descriptor.Descriptor(
+  name='OrderReq',
+  full_name='exercise.OrderReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='item_id', full_name='exercise.OrderReq.item_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='amount', full_name='exercise.OrderReq.amount', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=704,
+  serialized_end=747,
+)
+
+
+_ORDERRESP = _descriptor.Descriptor(
+  name='OrderResp',
+  full_name='exercise.OrderResp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='exercise.OrderResp.result', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=749,
+  serialized_end=776,
+)
+
 DESCRIPTOR.message_types_by_name['ConsumeReq'] = _CONSUMEREQ
 DESCRIPTOR.message_types_by_name['ConsumeResp'] = _CONSUMERESP
 DESCRIPTOR.message_types_by_name['QueryReq'] = _QUERYREQ
@@ -535,6 +604,8 @@ DESCRIPTOR.message_types_by_name['LoginReq'] = _LOGINREQ
 DESCRIPTOR.message_types_by_name['LoginResp'] = _LOGINRESP
 DESCRIPTOR.message_types_by_name['RechargeReq'] = _RECHARGEREQ
 DESCRIPTOR.message_types_by_name['RechargeResp'] = _RECHARGERESP
+DESCRIPTOR.message_types_by_name['OrderReq'] = _ORDERREQ
+DESCRIPTOR.message_types_by_name['OrderResp'] = _ORDERRESP
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ConsumeReq = _reflection.GeneratedProtocolMessageType('ConsumeReq', (_message.Message,), {
@@ -621,6 +692,20 @@ RechargeResp = _reflection.GeneratedProtocolMessageType('RechargeResp', (_messag
   })
 _sym_db.RegisterMessage(RechargeResp)
 
+OrderReq = _reflection.GeneratedProtocolMessageType('OrderReq', (_message.Message,), {
+  'DESCRIPTOR' : _ORDERREQ,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.OrderReq)
+  })
+_sym_db.RegisterMessage(OrderReq)
+
+OrderResp = _reflection.GeneratedProtocolMessageType('OrderResp', (_message.Message,), {
+  'DESCRIPTOR' : _ORDERRESP,
+  '__module__' : 'exercise_pb2'
+  # @@protoc_insertion_point(class_scope:exercise.OrderResp)
+  })
+_sym_db.RegisterMessage(OrderResp)
+
 
 
 _SAVE = _descriptor.ServiceDescriptor(
@@ -629,8 +714,8 @@ _SAVE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=705,
-  serialized_end=1038,
+  serialized_start=779,
+  serialized_end=1162,
   methods=[
   _descriptor.MethodDescriptor(
     name='Pay',
@@ -684,6 +769,15 @@ _SAVE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_RECHARGEREQ,
     output_type=_RECHARGERESP,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Order',
+    full_name='exercise.Save.Order',
+    index=6,
+    containing_service=None,
+    input_type=_ORDERREQ,
+    output_type=_ORDERRESP,
     serialized_options=None,
   ),
 ])

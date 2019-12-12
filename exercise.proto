@@ -68,6 +68,15 @@ message RechargeResp{
     string result = 1;
 }
 
+message OrderReq{
+    int32 item_id = 1;
+    int32 amount = 2;
+}
+
+message OrderResp{
+    string result = 1;
+}
+
 service Save{
     rpc Pay(ConsumeReq) returns(ConsumeResp);
     rpc Query(QueryReq) returns(QueryResp);
@@ -75,5 +84,6 @@ service Save{
     rpc Register(RegisteredReq) returns(RegisteredResp);
     rpc Login(LoginReq) returns(LoginResp);
     rpc Recharge(RechargeReq) returns(RechargeResp);
+    rpc Order(OrderReq) returns(OrderResp);
 }
 
